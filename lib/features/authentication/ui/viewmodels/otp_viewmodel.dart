@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:yalla_health/app/app.locator.dart';
@@ -10,18 +9,16 @@ import 'package:yalla_health/core/validators/form_validators.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/get_shared_users_usecase.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/get_user_details_usecase.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/login_usecase.dart';
-import 'package:yalla_health/features/authentication/domain/usecases/register_usecase.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/verify_otp_usecase.dart';
-import 'package:yalla_health/features/authentication/ui/views/login_view.form.dart';
+import 'package:yalla_health/features/authentication/ui/views/otp_view.form.dart';
 import 'package:yalla_health/services/storage_service.dart';
 import 'package:yalla_health/services/user_service.dart';
 
-class OtpViewModel extends FormViewModel {
+class OtpViewModel extends FormViewModel with $OtpView {
   final NavigationService _navigationService = locator<NavigationService>();
   final SnackbarService _snackbarService = locator<SnackbarService>();
   final VerifyOtpUseCase _verifyOtpUseCase = locator<VerifyOtpUseCase>();
   final LoginUseCase _loginUseCase = locator<LoginUseCase>();
-  final RegisterUseCase _registerUseCase = locator<RegisterUseCase>();
   final GetUserDetailsUseCase _getUserDetailsUseCase = locator<GetUserDetailsUseCase>();
   final GetSharedUsersUseCase _getSharedUsersUseCase = locator<GetSharedUsersUseCase>();
   final StorageService _storageService = locator<StorageService>();
@@ -46,14 +43,10 @@ class OtpViewModel extends FormViewModel {
 
   Timer? _timer;
 
-  final TextEditingController otpController = TextEditingController();
-  final FocusNode otpFocusNode = FocusNode();
-
   @override
   void dispose() {
     _timer?.cancel();
-    otpController.dispose();
-    otpFocusNode.dispose();
+    disposeForm();
     super.dispose();
   }
 
@@ -266,7 +259,6 @@ class OtpViewModel extends FormViewModel {
 
   @override
   void setFormStatus() {
-    final otpValidation = FormValidators.validateOtp(otpController.text);
-    setValidationMessage(otpValidation);
+    setOtpValidationMessage(FormValidators.validateOtp(otpController.text));
   }
 }
