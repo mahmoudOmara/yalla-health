@@ -3,17 +3,13 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:yalla_health/app/app.locator.dart';
 import 'package:yalla_health/app/app.router.dart';
 import 'package:yalla_health/core/utils/usecase.dart';
-import 'package:yalla_health/features/authentication/domain/usecases/get_user_details_usecase.dart';
-import 'package:yalla_health/features/authentication/domain/usecases/get_shared_users_usecase.dart';
+import 'package:yalla_health/features/authentication/domain/usecases/check_auth_status_usecase.dart';
 import 'package:yalla_health/services/storage_service.dart';
-import 'package:yalla_health/services/user_service.dart';
 
 class SplashViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final StorageService _storageService = locator<StorageService>();
-  final UserService _userService = locator<UserService>();
-  final GetUserDetailsUseCase _getUserDetailsUseCase = locator<GetUserDetailsUseCase>();
-  final GetSharedUsersUseCase _getSharedUsersUseCase = locator<GetSharedUsersUseCase>();
+  final CheckAuthStatusUseCase _checkAuthStatusUseCase = locator<CheckAuthStatusUseCase>();
 
   Future<void> initialize() async {
     setBusy(true);
@@ -21,79 +17,31 @@ class SplashViewModel extends BaseViewModel {
     // Initialize storage service
     await _storageService.init();
     
-    // Check if user is logged in
-    final isLoggedIn = await _storageService.isLoggedIn();
-    
-    if (isLoggedIn) {
-      await _attemptAutoLogin();
-    } else {
-      await _navigateToLogin();
-    }
+    // Check authentication status and auto-login
+    await _attemptAutoLogin();
     
     setBusy(false);
   }
 
   Future<void> _attemptAutoLogin() async {
     try {
-      // Try to get user details to verify token is valid
-      final userDetailsResult = await _getUserDetailsUseCase.call(NoParams());
+      // Use the checkAuthStatus use case which handles token validation and user data loading
+      final authStatusResult = await _checkAuthStatusUseCase.call(NoParams());
       
-      await userDetailsResult.fold(
+      authStatusResult.fold(
         (failure) async {
-          // Token is invalid, clear storage and go to login
+          // Authentication failed, clear storage and go to login
           await _storageService.clearAll();
           await _navigateToLogin();
         },
-        (user) async {
-          // Token is valid, get shared users and navigate to home
-          final sharedUsersResult = await _getSharedUsersUseCase.call(NoParams());
-          
-          sharedUsersResult.fold(
-            (failure) {
-              // Continue without shared users
-              final serviceUser = User(
-                id: user.id,
-                name: user.name,
-                phone: user.phone,
-                email: user.email ?? '',
-                gender: user.gender,
-                age: user.age,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-              );
-              
-              _userService.setCurrentUser(serviceUser);
-              _navigateToHome();
-            },
-            (sharedUsers) {
-              // Set user and shared users in service
-              final serviceUser = User(
-                id: user.id,
-                name: user.name,
-                phone: user.phone,
-                email: user.email ?? '',
-                gender: user.gender,
-                age: user.age,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-              );
-              
-              final serviceSharedUsers = sharedUsers.map((userEntity) => User(
-                id: userEntity.id,
-                name: userEntity.name,
-                phone: userEntity.phone,
-                email: userEntity.email ?? '',
-                gender: userEntity.gender,
-                age: userEntity.age,
-                createdAt: userEntity.createdAt,
-                updatedAt: userEntity.updatedAt,
-              )).toList();
-              
-              _userService.setCurrentUser(serviceUser);
-              _userService.setSharedUsers(serviceSharedUsers);
-              _navigateToHome();
-            },
-          );
+        (isAuthenticated) async {
+          if (isAuthenticated) {
+            // User is authenticated and data is loaded in UserService by repository
+            await _navigateToHome();
+          } else {
+            // User is not authenticated
+            await _navigateToLogin();
+          }
         },
       );
     } catch (e) {

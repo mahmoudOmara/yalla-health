@@ -14,6 +14,7 @@ import 'package:yalla_health/features/authentication/domain/usecases/verify_otp_
 import 'package:yalla_health/features/authentication/domain/usecases/get_user_details_usecase.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/get_shared_users_usecase.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/logout_usecase.dart';
+import 'package:yalla_health/features/authentication/domain/usecases/check_auth_status_usecase.dart';
 
 // UI imports
 import 'package:yalla_health/features/authentication/ui/views/splash_view.dart';
@@ -56,6 +57,7 @@ import 'package:yalla_health/features/home/ui/views/home_view.dart';
     LazySingleton(classType: GetUserDetailsUseCase),
     LazySingleton(classType: GetSharedUsersUseCase),
     LazySingleton(classType: LogoutUseCase),
+    LazySingleton(classType: CheckAuthStatusUseCase),
     
     // Authentication Repository
     LazySingleton(classType: AuthRepository, asType: IAuthRepository),

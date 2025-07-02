@@ -15,6 +15,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 import '../features/authentication/data/datasources/auth_remote_datasource.dart';
 import '../features/authentication/data/repositories/auth_repository_impl.dart';
 import '../features/authentication/domain/repositories/auth_repository.dart';
+import '../features/authentication/domain/usecases/check_auth_status_usecase.dart';
 import '../features/authentication/domain/usecases/get_shared_users_usecase.dart';
 import '../features/authentication/domain/usecases/get_user_details_usecase.dart';
 import '../features/authentication/domain/usecases/login_usecase.dart';
@@ -51,6 +52,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => GetUserDetailsUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton(() => GetSharedUsersUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton(() => LogoutUseCase(locator<IAuthRepository>()));
+  locator.registerLazySingleton(() => CheckAuthStatusUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton<IAuthRepository>(() => AuthRepository(
     remoteDataSource: locator<IAuthRemoteDataSource>(),
     storageService: locator<StorageService>(),

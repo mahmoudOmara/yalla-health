@@ -124,9 +124,6 @@ class OtpViewModel extends FormViewModel with $OtpView {
         notifyListeners();
       },
       (token) async {
-        // Store the token
-        await _storageService.saveToken(token);
-        
         // Get user details and shared users
         await _loadUserData();
         
@@ -171,6 +168,18 @@ class OtpViewModel extends FormViewModel with $OtpView {
               );
               
               _userService.setCurrentUser(serviceUser);
+              
+              // Save user data for auto-login
+              _storageService.saveUserData({
+                'id': user.id,
+                'name': user.name,
+                'phone': user.phone,
+                'email': user.email,
+                'gender': user.gender,
+                'age': user.age,
+                'createdAt': user.createdAt.toIso8601String(),
+                'updatedAt': user.updatedAt.toIso8601String(),
+              });
             },
             (sharedUsers) {
               // Set user and shared users in service
@@ -198,6 +207,31 @@ class OtpViewModel extends FormViewModel with $OtpView {
               
               _userService.setCurrentUser(serviceUser);
               _userService.setSharedUsers(serviceSharedUsers);
+              
+              // Save user data and shared users for auto-login
+              _storageService.saveUserData({
+                'id': user.id,
+                'name': user.name,
+                'phone': user.phone,
+                'email': user.email,
+                'gender': user.gender,
+                'age': user.age,
+                'createdAt': user.createdAt.toIso8601String(),
+                'updatedAt': user.updatedAt.toIso8601String(),
+              });
+              
+              _storageService.saveSharedUsers(
+                sharedUsers.map((userEntity) => {
+                  'id': userEntity.id,
+                  'name': userEntity.name,
+                  'phone': userEntity.phone,
+                  'email': userEntity.email,
+                  'gender': userEntity.gender,
+                  'age': userEntity.age,
+                  'createdAt': userEntity.createdAt.toIso8601String(),
+                  'updatedAt': userEntity.updatedAt.toIso8601String(),
+                }).toList(),
+              );
             },
           );
         },
