@@ -119,7 +119,6 @@ class OtpView extends StackedView<OtpViewModel> with $OtpView {
                         color: AppTheme.textHint.withOpacity(0.5),
                         letterSpacing: 8,
                       ),
-                      errorText: viewModel.hasOtpValidationMessage ? viewModel.otpValidationMessage : null,
                       counterText: '',
                     ),
                   ),
@@ -167,7 +166,7 @@ class OtpView extends StackedView<OtpViewModel> with $OtpView {
               
               // Verify Button
               ElevatedButton(
-                onPressed: viewModel.isBusy ? null : viewModel.verifyOtp,
+                onPressed: viewModel.canVerifyOtp ? viewModel.verifyOtp : null,
                 child: viewModel.isBusy
                     ? const SizedBox(
                         height: 20,

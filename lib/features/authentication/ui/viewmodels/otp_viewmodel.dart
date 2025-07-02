@@ -91,19 +91,17 @@ class OtpViewModel extends FormViewModel with $OtpView {
     return phone;
   }
 
+  bool get hasValidOtp => otpController.text.length == AppConstants.otpLength;
+  
+  bool get canVerifyOtp => hasValidOtp && !isBusy;
+
   void onOtpChanged(String value) {
     _clearError();
-    
-    // Auto-verify when 6 digits are entered
-    if (value.length == AppConstants.otpLength) {
-      verifyOtp();
-    }
-    
     notifyListeners();
   }
 
   Future<void> verifyOtp() async {
-    if (!isFormValid) return;
+    if (!hasValidOtp) return;
 
     setBusy(true);
     _clearError();
@@ -123,7 +121,6 @@ class OtpViewModel extends FormViewModel with $OtpView {
           title: 'Verification Failed',
           duration: const Duration(seconds: AppConstants.snackbarErrorDuration),
         );
-        otpController.clear();
         notifyListeners();
       },
       (token) async {
