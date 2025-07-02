@@ -27,21 +27,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 40),
-              
-              // Back button
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 20),
+              const SizedBox(height: 60),
               
               // Welcome Text
               const Text(
@@ -84,6 +70,10 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     focusNode: phoneFocusNode,
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.done,
+                    contextMenuBuilder: (context, editableTextState) {
+                      // Disable context menu to prevent the assertion error
+                      return const SizedBox.shrink();
+                    },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(10),

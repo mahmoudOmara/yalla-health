@@ -30,21 +30,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 20),
-              
-              // Back button
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               
               // Title
               const Text(
@@ -101,13 +87,17 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                     focusNode: phoneFocusNode,
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
+                    contextMenuBuilder: (context, editableTextState) {
+                      // Disable context menu to prevent the assertion error
+                      return const SizedBox.shrink();
+                    },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(10),
                     ],
                     onChanged: viewModel.onPhoneChanged,
                     decoration: InputDecoration(
-                      hintText: '+20 101 234 5678',
+                      hintText: '101 234 5678',
                       prefixIcon: Container(
                         width: 80,
                         padding: const EdgeInsets.all(12),
