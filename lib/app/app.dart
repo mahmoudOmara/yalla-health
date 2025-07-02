@@ -21,7 +21,6 @@ import 'package:yalla_health/features/authentication/ui/views/splash_view.dart';
 import 'package:yalla_health/features/authentication/ui/views/login_view.dart';
 import 'package:yalla_health/features/authentication/ui/views/register_view.dart';
 import 'package:yalla_health/features/authentication/ui/views/otp_view.dart';
-import 'package:yalla_health/features/home/ui/views/home_view.dart';
 import 'package:yalla_health/features/main_navigation/ui/views/main_navigation_view.dart';
 
 @StackedApp(
@@ -33,7 +32,6 @@ import 'package:yalla_health/features/main_navigation/ui/views/main_navigation_v
     MaterialRoute(page: OtpView),
     
     // Main App Routes
-    MaterialRoute(page: HomeView),
     MaterialRoute(page: MainNavigationView),
     // TODO: Add remaining app routes when features are implemented
   ],
