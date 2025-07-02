@@ -93,14 +93,14 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     decoration: InputDecoration(
                       hintText: '+20 101 234 5678',
                       prefixIcon: Container(
-                        width: 60,
+                        width: 80,
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              width: 24,
-                              height: 16,
+                              width: 20,
+                              height: 14,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(2),
                                 color: Colors.red,
@@ -119,11 +119,11 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
                             const Text(
                               '+20',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 15,
                                 color: AppTheme.textPrimary,
                               ),
                             ),
