@@ -28,8 +28,6 @@ class RegisterViewModel extends FormViewModel with $RegisterView {
     super.dispose();
   }
 
-  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
-  
   String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
   
   
@@ -47,9 +45,9 @@ class RegisterViewModel extends FormViewModel with $RegisterView {
 
   void onPhoneChanged(String value) {
     _clearError();
-
+    
     // Format for display
-    final formatted = formattedPhone;
+    final formatted = EgyptianPhoneFormatter.format(value);
     
     // Update controller with formatted text, avoiding loops
     if (formatted != phoneController.text) {

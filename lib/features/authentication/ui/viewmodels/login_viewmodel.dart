@@ -17,8 +17,6 @@ class LoginViewModel extends FormViewModel with $LoginView {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // Store raw user input separate from formatted display
-  String _rawPhoneInput = '';
 
   @override
   void dispose() {
@@ -26,8 +24,6 @@ class LoginViewModel extends FormViewModel with $LoginView {
     super.dispose();
   }
 
-  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
-  
   String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
   
   bool get hasValidPhone => EgyptianPhoneFormatter.isValid(phoneController.text);
@@ -38,11 +34,8 @@ class LoginViewModel extends FormViewModel with $LoginView {
     // Clear any previous errors when user starts typing
     _clearError();
     
-    // Store only digits from user input
-    _rawPhoneInput = EgyptianPhoneFormatter.extractDigits(value);
-    
     // Format for display
-    final formatted = formattedPhone;
+    final formatted = EgyptianPhoneFormatter.format(value);
     
     // Update controller with formatted text, avoiding loops
     if (formatted != phoneController.text) {

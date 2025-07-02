@@ -1,75 +1,75 @@
 /// Utility class for formatting and handling Egyptian phone numbers
-/// Supports the +20 country code format with proper validation
+/// Assumes input does NOT contain country code, outputs formatted numbers
 class EgyptianPhoneFormatter {
   static const String countryCode = '+20';
   static const int maxDigits = 10;
   static const List<String> validPrefixes = ['10', '11', '12', '15'];
 
-  /// Formats a phone number string for display
-  /// Example: "1012345678" becomes "+20 101 234 5678"
+  /// Formats a phone number string for display (without country code)
+  /// Example: "1012345678" becomes "101 234 5678"
+  /// Ignores non-digit characters and handles incomplete numbers
   static String format(String input) {
+    // Extract only digits from input
     final digits = _extractDigits(input);
     
+    // If no digits, return empty
     if (digits.isEmpty) return '';
     
-    // Limit to maxDigits
+    // Limit to maxDigits for Egyptian numbers
     final limitedDigits = digits.length > maxDigits 
         ? digits.substring(0, maxDigits) 
         : digits;
     
-    if (limitedDigits.length <= 2) {
-      return '$countryCode $limitedDigits';
+    // Progressive formatting based on digit count
+    if (limitedDigits.length <= 3) {
+      return limitedDigits;
     }
-    if (limitedDigits.length <= 5) {
-      return '$countryCode ${limitedDigits.substring(0, 2)} ${limitedDigits.substring(2)}';
-    }
-    if (limitedDigits.length <= 8) {
-      return '$countryCode ${limitedDigits.substring(0, 2)} ${limitedDigits.substring(2, 5)} ${limitedDigits.substring(5)}';
+    if (limitedDigits.length <= 6) {
+      return '${limitedDigits.substring(0, 3)} ${limitedDigits.substring(3)}';
     }
     
-    // Full format: +20 XXX XXX XXXX
-    final prefix = limitedDigits.substring(0, 2);
-    final middle = limitedDigits.substring(2, 5);
-    final suffix = limitedDigits.substring(5);
-    return '$countryCode $prefix $middle $suffix';
+    // Full format: XXX XXX XXXX
+    final prefix = limitedDigits.substring(0, 3);
+    final middle = limitedDigits.substring(3, limitedDigits.length > 6 ? 6 : limitedDigits.length);
+    final suffix = limitedDigits.length > 6 ? limitedDigits.substring(6) : '';
+    
+    return suffix.isEmpty ? '$prefix $middle' : '$prefix $middle $suffix';
   }
 
-  /// Returns a clean phone number with country code
+  /// Takes a formatted number (without country code) and returns clean format with +20
   /// Example: "101 234 5678" becomes "+201012345678"
-  static String clean(String input) {
-    final digits = _extractDigits(input);
+  static String clean(String formatted) {
+    // Extract only digits from formatted input
+    final digits = _extractDigits(formatted);
+    
+    // If no digits, return empty
+    if (digits.isEmpty) return '';
+    
+    // Limit to maxDigits for Egyptian numbers
     final limitedDigits = digits.length > maxDigits 
         ? digits.substring(0, maxDigits) 
         : digits;
+    
+    // Return with country code (no spaces)
     return '$countryCode$limitedDigits';
   }
 
-  /// Validates if the phone number format is correct for Egypt
-  static bool isValid(String input) {
-    final digits = _extractDigits(input);
+  /// Validates a formatted number (without country code)
+  /// Example: "101 234 5678" returns true if valid Egyptian mobile number
+  static bool isValid(String formatted) {
+    // Extract only digits from formatted input
+    final digits = _extractDigits(formatted);
     
-    // Must be exactly 10 digits
+    // Must be exactly 10 digits for a complete Egyptian number
     if (digits.length != maxDigits) return false;
     
-    // Must start with valid prefix
+    // Must start with valid Egyptian mobile prefix
     final prefix = digits.substring(0, 2);
     return validPrefixes.contains(prefix);
   }
 
   /// Extracts only digits from input string
-  static String extractDigits(String input) {
+  static String _extractDigits(String input) {
     return input.replaceAll(RegExp(r'[^\d]'), '');
   }
-  
-  /// Private method for internal use (kept for backward compatibility)
-  static String _extractDigits(String input) => extractDigits(input);
-
-  /// Returns example format for UI hints
-  static String get exampleFormat => '$countryCode 101 234 5678';
-
-  /// Returns helper text for user guidance
-  static String get helperText => 'Format: $countryCode 1X XXX XXXX';
-
-  /// Returns the mask pattern for input formatters
-  static String get maskPattern => '$countryCode ### ### ####';
 }
