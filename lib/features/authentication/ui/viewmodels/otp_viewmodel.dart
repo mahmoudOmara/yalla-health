@@ -133,7 +133,7 @@ class OtpViewModel extends FormViewModel with $OtpView {
           duration: const Duration(seconds: AppConstants.snackbarSuccessDuration),
         );
         
-        _navigationService.clearStackAndShow(Routes.homeView);
+        _navigationService.clearStackAndShow(Routes.mainNavigationView);
       },
     );
 

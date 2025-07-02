@@ -46,6 +46,10 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton<IAuthRemoteDataSource>(
       () => AuthRemoteDataSource(apiService: locator<ApiService>()));
+  locator.registerLazySingleton<IAuthRepository>(() => AuthRepository(
+      remoteDataSource: locator<IAuthRemoteDataSource>(),
+      storageService: locator<StorageService>(),
+      userService: locator<UserService>()));
   locator.registerLazySingleton(() => LoginUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton(() => RegisterUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton(() => VerifyOtpUseCase(locator<IAuthRepository>()));
@@ -53,9 +57,4 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => GetSharedUsersUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton(() => LogoutUseCase(locator<IAuthRepository>()));
   locator.registerLazySingleton(() => CheckAuthStatusUseCase(locator<IAuthRepository>()));
-  locator.registerLazySingleton<IAuthRepository>(() => AuthRepository(
-    remoteDataSource: locator<IAuthRemoteDataSource>(),
-    storageService: locator<StorageService>(),
-    userService: locator<UserService>(),
-  ));
 }

@@ -22,6 +22,7 @@ import 'package:yalla_health/features/authentication/ui/views/login_view.dart';
 import 'package:yalla_health/features/authentication/ui/views/register_view.dart';
 import 'package:yalla_health/features/authentication/ui/views/otp_view.dart';
 import 'package:yalla_health/features/home/ui/views/home_view.dart';
+import 'package:yalla_health/features/main_navigation/ui/views/main_navigation_view.dart';
 
 @StackedApp(
   routes: [
@@ -33,6 +34,7 @@ import 'package:yalla_health/features/home/ui/views/home_view.dart';
     
     // Main App Routes
     MaterialRoute(page: HomeView),
+    MaterialRoute(page: MainNavigationView),
     // TODO: Add remaining app routes when features are implemented
   ],
   dependencies: [
@@ -50,6 +52,9 @@ import 'package:yalla_health/features/home/ui/views/home_view.dart';
     // Authentication Data Sources
     LazySingleton(classType: AuthRemoteDataSource, asType: IAuthRemoteDataSource),
     
+    // Authentication Repository
+    LazySingleton(classType: AuthRepository, asType: IAuthRepository),
+    
     // Authentication Use Cases
     LazySingleton(classType: LoginUseCase),
     LazySingleton(classType: RegisterUseCase),
@@ -58,9 +63,6 @@ import 'package:yalla_health/features/home/ui/views/home_view.dart';
     LazySingleton(classType: GetSharedUsersUseCase),
     LazySingleton(classType: LogoutUseCase),
     LazySingleton(classType: CheckAuthStatusUseCase),
-    
-    // Authentication Repository
-    LazySingleton(classType: AuthRepository, asType: IAuthRepository),
     
     // TODO: Add additional dependencies when features are implemented
   ],

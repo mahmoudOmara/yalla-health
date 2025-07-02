@@ -5,10 +5,10 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i7;
+import 'package:flutter/material.dart' as _i8;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i8;
+import 'package:stacked_services/stacked_services.dart' as _i9;
 import 'package:yalla_health/features/authentication/ui/views/login_view.dart'
     as _i3;
 import 'package:yalla_health/features/authentication/ui/views/otp_view.dart'
@@ -18,6 +18,8 @@ import 'package:yalla_health/features/authentication/ui/views/register_view.dart
 import 'package:yalla_health/features/authentication/ui/views/splash_view.dart'
     as _i2;
 import 'package:yalla_health/features/home/ui/views/home_view.dart' as _i6;
+import 'package:yalla_health/features/main_navigation/ui/views/main_navigation_view.dart'
+    as _i7;
 
 class Routes {
   static const splashView = '/';
@@ -30,12 +32,15 @@ class Routes {
 
   static const homeView = '/home-view';
 
+  static const mainNavigationView = '/main-navigation-view';
+
   static const all = <String>{
     splashView,
     loginView,
     registerView,
     otpView,
     homeView,
+    mainNavigationView,
   };
 }
 
@@ -61,30 +66,34 @@ class StackedRouter extends _i1.RouterBase {
       Routes.homeView,
       page: _i6.HomeView,
     ),
+    _i1.RouteDef(
+      Routes.mainNavigationView,
+      page: _i7.MainNavigationView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashView: (data) {
-      return _i7.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashView(),
         settings: data,
       );
     },
     _i3.LoginView: (data) {
-      return _i7.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.LoginView(),
         settings: data,
       );
     },
     _i4.RegisterView: (data) {
-      return _i7.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.RegisterView(),
         settings: data,
       );
     },
     _i5.OtpView: (data) {
       final args = data.getArgs<OtpViewArguments>(nullOk: false);
-      return _i7.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => _i5.OtpView(
             key: args.key,
             phone: args.phone,
@@ -93,8 +102,14 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i6.HomeView: (data) {
-      return _i7.MaterialPageRoute<dynamic>(
+      return _i8.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.HomeView(),
+        settings: data,
+      );
+    },
+    _i7.MainNavigationView: (data) {
+      return _i8.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i7.MainNavigationView(),
         settings: data,
       );
     },
@@ -114,7 +129,7 @@ class OtpViewArguments {
     required this.isRegistration,
   });
 
-  final _i7.Key? key;
+  final _i8.Key? key;
 
   final String phone;
 
@@ -139,7 +154,7 @@ class OtpViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i8.NavigationService {
+extension NavigatorStateExtension on _i9.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -183,7 +198,7 @@ extension NavigatorStateExtension on _i8.NavigationService {
   }
 
   Future<dynamic> navigateToOtpView({
-    _i7.Key? key,
+    _i8.Key? key,
     required String phone,
     required bool isRegistration,
     int? routerId,
@@ -209,6 +224,20 @@ extension NavigatorStateExtension on _i8.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.homeView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToMainNavigationView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.mainNavigationView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -258,7 +287,7 @@ extension NavigatorStateExtension on _i8.NavigationService {
   }
 
   Future<dynamic> replaceWithOtpView({
-    _i7.Key? key,
+    _i8.Key? key,
     required String phone,
     required bool isRegistration,
     int? routerId,
@@ -284,6 +313,20 @@ extension NavigatorStateExtension on _i8.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.homeView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithMainNavigationView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.mainNavigationView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

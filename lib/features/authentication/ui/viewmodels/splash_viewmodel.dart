@@ -58,6 +58,6 @@ class SplashViewModel extends BaseViewModel {
 
   Future<void> _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 2)); // Show splash for 2 seconds
-    _navigationService.clearStackAndShow(Routes.homeView);
+    _navigationService.clearStackAndShow(Routes.mainNavigationView);
   }
 }
