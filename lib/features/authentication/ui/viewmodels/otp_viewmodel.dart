@@ -128,6 +128,7 @@ class OtpViewModel extends FormViewModel {
         _snackbarService.showSnackbar(
           message: failure.message,
           title: 'Verification Failed',
+          duration: const Duration(seconds: AppConstants.snackbarErrorDuration),
         );
         otpController.clear();
         notifyListeners();
@@ -142,6 +143,7 @@ class OtpViewModel extends FormViewModel {
         _snackbarService.showSnackbar(
           message: isRegistration ? 'Account created successfully!' : 'Login successful!',
           title: 'Success',
+          duration: const Duration(seconds: AppConstants.snackbarSuccessDuration),
         );
         
         _navigationService.clearStackAndShow(Routes.homeView);
@@ -240,6 +242,7 @@ class OtpViewModel extends FormViewModel {
           _snackbarService.showSnackbar(
             message: 'OTP sent successfully',
             title: 'Success',
+            duration: const Duration(seconds: AppConstants.snackbarSuccessDuration),
           );
           _startTimer();
           otpController.clear();

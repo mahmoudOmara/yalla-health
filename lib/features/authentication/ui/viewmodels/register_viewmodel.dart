@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:yalla_health/app/app.locator.dart';
 import 'package:yalla_health/app/app.router.dart';
+import 'package:yalla_health/core/constants/app_constants.dart';
 import 'package:yalla_health/core/utils/egyptian_phone_formatter.dart';
 import 'package:yalla_health/core/validators/form_validators.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/register_usecase.dart';
@@ -125,6 +126,7 @@ class RegisterViewModel extends FormViewModel {
         _snackbarService.showSnackbar(
           message: failure.message,
           title: 'Registration Failed',
+          duration: const Duration(seconds: AppConstants.snackbarErrorDuration),
         );
         notifyListeners();
       },
@@ -132,6 +134,7 @@ class RegisterViewModel extends FormViewModel {
         _snackbarService.showSnackbar(
           message: 'OTP sent successfully',
           title: 'Success',
+          duration: const Duration(seconds: AppConstants.snackbarSuccessDuration),
         );
         _navigationService.navigateTo(
           Routes.otpView,

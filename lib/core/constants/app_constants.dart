@@ -35,6 +35,10 @@ class AppConstants {
   static const int otpLength = 6;
   static const int otpTimeoutSeconds = 300; // 5 minutes
   
+  // Snackbar Durations (in seconds)
+  static const int snackbarErrorDuration = 4;
+  static const int snackbarSuccessDuration = 3;
+  
   // Search Configuration
   static const int searchDebounceMs = 300;
   
