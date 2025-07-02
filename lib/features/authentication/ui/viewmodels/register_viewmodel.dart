@@ -30,6 +30,9 @@ class RegisterViewModel extends FormViewModel {
   final FocusNode ageFocusNode = FocusNode();
 
   final List<String> genderOptions = ['male', 'female'];
+  
+  // Store raw user input separate from formatted display
+  String _rawPhoneInput = '';
 
   @override
   void dispose() {
@@ -44,14 +47,31 @@ class RegisterViewModel extends FormViewModel {
     super.dispose();
   }
 
-  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
+  String get formattedPhone => EgyptianPhoneFormatter.format(_rawPhoneInput);
   
-  String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
+  String get cleanPhone => EgyptianPhoneFormatter.clean(_rawPhoneInput);
+  
+  bool get hasValidPhone => EgyptianPhoneFormatter.isValid(_rawPhoneInput);
+  
+  bool get isFormValid => hasValidName && hasValidPhone && hasValidAge && hasValidGender && hasValidEmail;
+  
+  bool get hasValidName => nameController.text.trim().isNotEmpty;
+  bool get hasValidAge => ageController.text.isNotEmpty && int.tryParse(ageController.text) != null;
+  bool get hasValidGender => _selectedGender != null;
+  bool get hasValidEmail => emailController.text.isEmpty || emailController.text.contains('@');
+  
+  bool get canRegister => isFormValid && !isBusy;
 
   void onPhoneChanged(String value) {
     _clearError();
     
+    // Store only digits from user input
+    _rawPhoneInput = EgyptianPhoneFormatter.extractDigits(value);
+    
+    // Format for display
     final formatted = formattedPhone;
+    
+    // Update controller with formatted text, avoiding loops
     if (formatted != phoneController.text) {
       phoneController.value = TextEditingValue(
         text: formatted,

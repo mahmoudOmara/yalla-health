@@ -91,7 +91,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     onChanged: viewModel.onPhoneChanged,
                     onFieldSubmitted: (_) => viewModel.sendOtp(),
                     decoration: InputDecoration(
-                      hintText: '+20 101 234 5678',
+                      hintText: '101 234 5678',
                       prefixIcon: Container(
                         width: 80,
                         padding: const EdgeInsets.all(12),
@@ -149,7 +149,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
               
               // Send OTP Button
               ElevatedButton(
-                onPressed: viewModel.isBusy ? null : viewModel.sendOtp,
+                onPressed: viewModel.canSendOtp ? viewModel.sendOtp : null,
                 child: viewModel.isBusy
                     ? const SizedBox(
                         height: 20,

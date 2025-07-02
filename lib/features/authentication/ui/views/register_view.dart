@@ -277,7 +277,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
               
               // Register Button
               ElevatedButton(
-                onPressed: viewModel.isBusy ? null : viewModel.register,
+                onPressed: viewModel.canRegister ? viewModel.register : null,
                 child: viewModel.isBusy
                     ? const SizedBox(
                         height: 20,

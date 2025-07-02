@@ -10,19 +10,27 @@ class EgyptianPhoneFormatter {
   static String format(String input) {
     final digits = _extractDigits(input);
     
-    if (digits.isEmpty) return '$countryCode ';
-    if (digits.length <= 2) return '$countryCode $digits';
-    if (digits.length <= 5) {
-      return '$countryCode ${digits.substring(0, 2)} ${digits.substring(2)}';
+    if (digits.isEmpty) return '';
+    
+    // Limit to maxDigits
+    final limitedDigits = digits.length > maxDigits 
+        ? digits.substring(0, maxDigits) 
+        : digits;
+    
+    if (limitedDigits.length <= 2) {
+      return '$countryCode $limitedDigits';
     }
-    if (digits.length <= 8) {
-      return '$countryCode ${digits.substring(0, 2)} ${digits.substring(2, 5)} ${digits.substring(5)}';
+    if (limitedDigits.length <= 5) {
+      return '$countryCode ${limitedDigits.substring(0, 2)} ${limitedDigits.substring(2)}';
+    }
+    if (limitedDigits.length <= 8) {
+      return '$countryCode ${limitedDigits.substring(0, 2)} ${limitedDigits.substring(2, 5)} ${limitedDigits.substring(5)}';
     }
     
     // Full format: +20 XXX XXX XXXX
-    final prefix = digits.substring(0, 2);
-    final middle = digits.substring(2, 5);
-    final suffix = digits.substring(5, maxDigits);
+    final prefix = limitedDigits.substring(0, 2);
+    final middle = limitedDigits.substring(2, 5);
+    final suffix = limitedDigits.substring(5);
     return '$countryCode $prefix $middle $suffix';
   }
 
@@ -49,9 +57,12 @@ class EgyptianPhoneFormatter {
   }
 
   /// Extracts only digits from input string
-  static String _extractDigits(String input) {
+  static String extractDigits(String input) {
     return input.replaceAll(RegExp(r'[^\d]'), '');
   }
+  
+  /// Private method for internal use (kept for backward compatibility)
+  static String _extractDigits(String input) => extractDigits(input);
 
   /// Returns example format for UI hints
   static String get exampleFormat => '$countryCode 101 234 5678';

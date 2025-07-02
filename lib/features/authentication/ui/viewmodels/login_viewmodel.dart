@@ -17,6 +17,9 @@ class LoginViewModel extends FormViewModel {
 
   final TextEditingController phoneController = TextEditingController();
   final FocusNode phoneFocusNode = FocusNode();
+  
+  // Store raw user input separate from formatted display
+  String _rawPhoneInput = '';
 
   @override
   void dispose() {
@@ -25,16 +28,25 @@ class LoginViewModel extends FormViewModel {
     super.dispose();
   }
 
-  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
+  String get formattedPhone => EgyptianPhoneFormatter.format(_rawPhoneInput);
   
-  String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
+  String get cleanPhone => EgyptianPhoneFormatter.clean(_rawPhoneInput);
+  
+  bool get hasValidPhone => EgyptianPhoneFormatter.isValid(_rawPhoneInput);
+  
+  bool get canSendOtp => hasValidPhone && !isBusy;
 
   void onPhoneChanged(String value) {
     // Clear any previous errors when user starts typing
     _clearError();
     
-    // Update the controller with formatted text
+    // Store only digits from user input
+    _rawPhoneInput = EgyptianPhoneFormatter.extractDigits(value);
+    
+    // Format for display
     final formatted = formattedPhone;
+    
+    // Update controller with formatted text, avoiding loops
     if (formatted != phoneController.text) {
       phoneController.value = TextEditingValue(
         text: formatted,
