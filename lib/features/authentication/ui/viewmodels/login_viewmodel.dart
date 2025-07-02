@@ -26,11 +26,11 @@ class LoginViewModel extends FormViewModel with $LoginView {
     super.dispose();
   }
 
-  String get formattedPhone => EgyptianPhoneFormatter.format(_rawPhoneInput);
+  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
   
-  String get cleanPhone => EgyptianPhoneFormatter.clean(_rawPhoneInput);
+  String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
   
-  bool get hasValidPhone => EgyptianPhoneFormatter.isValid(_rawPhoneInput);
+  bool get hasValidPhone => EgyptianPhoneFormatter.isValid(phoneController.text);
   
   bool get canSendOtp => hasValidPhone && !isBusy;
 

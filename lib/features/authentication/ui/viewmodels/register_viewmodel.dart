@@ -21,9 +21,6 @@ class RegisterViewModel extends FormViewModel with $RegisterView {
   String? get selectedGender => _selectedGender;
 
   final List<String> genderOptions = ['male', 'female'];
-  
-  // Store raw user input separate from formatted display
-  String _rawPhoneInput = '';
 
   @override
   void dispose() {
@@ -31,9 +28,9 @@ class RegisterViewModel extends FormViewModel with $RegisterView {
     super.dispose();
   }
 
-  String get formattedPhone => EgyptianPhoneFormatter.format(_rawPhoneInput);
+  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
   
-  String get cleanPhone => EgyptianPhoneFormatter.clean(_rawPhoneInput);
+  String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
   
   
   bool get isFormValid {
@@ -41,7 +38,7 @@ class RegisterViewModel extends FormViewModel with $RegisterView {
   }
   
   bool get hasValidName => nameController.text.trim().isNotEmpty;
-  bool get hasValidPhone => EgyptianPhoneFormatter.isValid(_rawPhoneInput);
+  bool get hasValidPhone => EgyptianPhoneFormatter.isValid(phoneController.text);
   bool get hasValidAge => ageController.text.isNotEmpty && int.tryParse(ageController.text) != null;
   bool get hasValidGender => _selectedGender != null;
   bool get hasValidEmail => emailController.text.isEmpty || emailController.text.contains('@');
@@ -50,10 +47,7 @@ class RegisterViewModel extends FormViewModel with $RegisterView {
 
   void onPhoneChanged(String value) {
     _clearError();
-    
-    // Store only digits from user input
-    _rawPhoneInput = EgyptianPhoneFormatter.extractDigits(value);
-    
+
     // Format for display
     final formatted = formattedPhone;
     
