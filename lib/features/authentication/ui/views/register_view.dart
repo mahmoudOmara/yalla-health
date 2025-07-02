@@ -62,7 +62,6 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
                 onChanged: viewModel.onNameChanged,
-                errorText: viewModel.getNameError(),
                 hintText: 'Enter your full name',
               ),
               
@@ -129,7 +128,6 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                           ],
                         ),
                       ),
-                      errorText: viewModel.getPhoneError(),
                     ),
                   ),
                 ],
@@ -145,7 +143,6 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 onChanged: viewModel.onEmailChanged,
-                errorText: viewModel.getEmailError(),
                 hintText: 'Enter your email address',
               ),
               
@@ -159,7 +156,6 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
                 onChanged: viewModel.onAgeChanged,
-                errorText: viewModel.getAgeError(),
                 hintText: 'Enter your age',
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -238,18 +234,6 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                       );
                     }).toList(),
                   ),
-                  
-                  if (viewModel.getGenderError() != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        viewModel.getGenderError()!,
-                        style: const TextStyle(
-                          color: AppTheme.errorColor,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
                 ],
               ),
               
