@@ -7,8 +7,9 @@ import 'package:yalla_health/core/constants/app_constants.dart';
 import 'package:yalla_health/core/utils/egyptian_phone_formatter.dart';
 import 'package:yalla_health/core/validators/form_validators.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/login_usecase.dart';
+import 'package:yalla_health/features/authentication/ui/views/login_view.form.dart';
 
-class LoginViewModel extends FormViewModel {
+class LoginViewModel extends FormViewModel with $LoginView {
   final NavigationService _navigationService = locator<NavigationService>();
   final SnackbarService _snackbarService = locator<SnackbarService>();
   final LoginUseCase _loginUseCase = locator<LoginUseCase>();
@@ -16,16 +17,12 @@ class LoginViewModel extends FormViewModel {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  final TextEditingController phoneController = TextEditingController();
-  final FocusNode phoneFocusNode = FocusNode();
-  
   // Store raw user input separate from formatted display
   String _rawPhoneInput = '';
 
   @override
   void dispose() {
-    phoneController.dispose();
-    phoneFocusNode.dispose();
+    disposeForm();
     super.dispose();
   }
 
