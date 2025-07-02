@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-import 'package:yalla_health/core/constants/app_constants.dart';
 import 'package:yalla_health/core/theme/app_theme.dart';
+import 'package:yalla_health/core/widgets/error_message_widget.dart';
 import 'package:yalla_health/features/authentication/ui/viewmodels/login_viewmodel.dart';
 import 'login_view.form.dart';
 
@@ -140,34 +140,9 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
               
               // Error Message
               if (viewModel.errorMessage != null)
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.errorColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: AppTheme.errorColor.withOpacity(0.3),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.error_outline,
-                        color: AppTheme.errorColor,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          viewModel.errorMessage!,
-                          style: const TextStyle(
-                            color: AppTheme.errorColor,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                ErrorMessageWidget.apiError(
+                  message: viewModel.errorMessage!,
+                  onRetry: viewModel.sendOtp,
                 ),
               
               if (viewModel.errorMessage != null) const SizedBox(height: 24),

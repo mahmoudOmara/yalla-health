@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:yalla_health/app/app.locator.dart';
 import 'package:yalla_health/app/app.router.dart';
+import 'package:yalla_health/core/utils/egyptian_phone_formatter.dart';
 import 'package:yalla_health/core/validators/form_validators.dart';
 import 'package:yalla_health/features/authentication/domain/usecases/login_usecase.dart';
 
@@ -24,26 +25,9 @@ class LoginViewModel extends FormViewModel {
     super.dispose();
   }
 
-  String get formattedPhone {
-    final text = phoneController.text;
-    // Remove any existing formatting
-    final digits = text.replaceAll(RegExp(r'[^\d]'), '');
-    
-    if (digits.isEmpty) return '+20 ';
-    if (digits.length <= 2) return '+20 $digits';
-    if (digits.length <= 5) return '+20 ${digits.substring(0, 2)} ${digits.substring(2)}';
-    if (digits.length <= 8) return '+20 ${digits.substring(0, 2)} ${digits.substring(2, 5)} ${digits.substring(5)}';
-    return '+20 ${digits.substring(0, 2)} ${digits.substring(2, 5)} ${digits.substring(5, 9)}';
-  }
-
-  String get cleanPhone {
-    final text = phoneController.text;
-    final digits = text.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.length >= 10) {
-      return '+20${digits.substring(0, 10)}';
-    }
-    return '+20$digits';
-  }
+  String get formattedPhone => EgyptianPhoneFormatter.format(phoneController.text);
+  
+  String get cleanPhone => EgyptianPhoneFormatter.clean(phoneController.text);
 
   void onPhoneChanged(String value) {
     // Clear any previous errors when user starts typing

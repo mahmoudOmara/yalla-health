@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:yalla_health/core/constants/app_constants.dart';
 import 'package:yalla_health/core/theme/app_theme.dart';
+import 'package:yalla_health/core/widgets/error_message_widget.dart';
 import 'package:yalla_health/features/authentication/ui/viewmodels/otp_viewmodel.dart';
 import 'otp_view.form.dart';
 
@@ -156,34 +157,11 @@ class OtpView extends StackedView<OtpViewModel> with $OtpView {
               
               // Error Message
               if (viewModel.errorMessage != null)
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(bottom: 24),
-                  decoration: BoxDecoration(
-                    color: AppTheme.errorColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: AppTheme.errorColor.withOpacity(0.3),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.error_outline,
-                        color: AppTheme.errorColor,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          viewModel.errorMessage!,
-                          style: const TextStyle(
-                            color: AppTheme.errorColor,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: ErrorMessageWidget.apiError(
+                    message: viewModel.errorMessage!,
+                    onRetry: viewModel.verifyOtp,
                   ),
                 ),
               
