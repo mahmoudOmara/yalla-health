@@ -158,13 +158,10 @@
 
 **Top Section: Account Selection**
 - Dropdown menu to select the account currently using the app
-- Options: Main authenticated account + all accounts that grant access
-- Default selection: Authenticated user's account
 - When account changes: Fetch fresh health issues data for selected account
 
 **Middle Section: Search & Filters**
 - Search bar to filter issues by name, description, symptoms, treatment, notes
-- Local fuzzy search implementation (no API calls)
 - Filter controls:
   - **Category**: Multi-select dropdown (categories retrieved from API)
   - **Include Files**: Toggle (show only issues with attached files)
@@ -188,11 +185,10 @@
 - When new issue is saved, it must instantly appear in the list
 
 ### 2.2 Data Flow
-- **Account Selection**: Send selected account UUID with API requests
+- **Account Selection**: Send selected account UUID with API requests via `X-User-UUID`
 - **No Pagination**: Load all health issues for selected account
 - **No Caching**: Always fetch fresh data when switching accounts
-- **Local Search**: Perform fuzzy search on locally loaded data
-
+- **Server-side search and filtering**: Supports query parameters for filtering/searching issues
 ---
 
 ## Feature 3: Add/Edit Health Issue
@@ -378,6 +374,29 @@ Simple layout with two primary action buttons:
 
 ---
 
+## Feature 9: Account Selection
+
+### 2.1 Global Behavior
+- The account selection mechanism affects **all app views and API requests**.
+- Options: Main authenticated account + all accounts that grant access
+- Default selection: Authenticated user's account
+- The selected account UUID must be passed in the header:
+  ```http
+  X-User-UUID: selected_account_uuid
+  ```
+- Changing the account triggers a refresh of all dependent data.
+
+### 2.2 UI Placement
+- **Preferred**: A fixed dropdown in the app bar on all major screens.
+- **Alternative**: Reusable account selector component embedded per-screen.
+- Must show account name, allow switching, and reload views.
+
+### 2.3 Integration Requirements
+- Centralized state management system (Stacked)
+- List of accessible accounts
+
+---
+
 ## API Integration Guidelines
 
 ### Request Headers (All API Calls)
@@ -474,40 +493,42 @@ For health-related API calls, include selected account UUID in the headers:
 
 ## Search & Filter Implementation
 
-### Local Fuzzy Search
-- Use fuzzywuzzy package for intelligent search
-- Search across multiple fields:
+- Client sends query parameters to server for filtering & search.
+- Example:
+  ```http
+  GET /api/health-issues?search=abc&category_id=3&severity=low&include_files=true
+  ```
+
+### Search Fields
+- Server should support searching across:
   - Issue title
   - Description
   - Symptoms
   - Treatment
   - Notes
 - Implement search debouncing (300ms delay)
-- Highlight search terms in results
 
 ### Filter Categories
 1. **Category Filter**:
-   - Multi-select dropdown
+   - Single-select dropdown
    - Categories retrieved from API
-   - Show count of issues per category
 
 2. **Status Filter**:
-   - Multi-select dropdown
+   - Single-select dropdown
    - Statuses retrieved from API
-   - Show count of issues per status
 
 3. **Severity Filter**:
-   - Multi-select dropdown
+   - Single-select dropdown
    - Severities retrieved from API
-   - Show count of issues per severity
 
 4. **Files Filter**:
    - Toggle switch
    - Show only health issues with attached files
-   - Show count of issues with files
 
-### Filter Persistence
-- Filters reset when switching accounts
+### Client Behavior
+- UI triggers API calls on filter/search changes
+- No local filtering or caching
+- Filter resets when account is switched
 - No filter state persistence across app sessions
 - Clear filter option to reset all filters
 
